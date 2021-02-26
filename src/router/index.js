@@ -84,6 +84,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/card',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/card/index'),
+        name: 'Card',
+        meta: { title: '充值卡', icon: 'card', affix: true }
+      }
+    ]
+  },
+  {
     path: '/documentation',
     component: Layout,
     children: [
