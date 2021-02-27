@@ -35,49 +35,49 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="cardCode" width="150px" align="center">
+      <el-table-column label="卡号" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cardCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="cardPassword" width="150px" align="center">
+      <el-table-column label="卡密" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cardPassword }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="getType" width="150px" align="center">
+      <el-table-column label="获取方式" width="150px" align="center">
         <template slot-scope="{row}">
           <span v-if="row.getType==0">后台开通</span>
-          <span v-if="row.getType==1">自主申请</span>
-          <span>{{ row.getType }}</span>
+          <span v-else-if="row.getType==1">自主申请</span>
+          <span v-else>{{ row.getType }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="useStatus" width="150px" align="center">
+      <el-table-column label="卡状态" width="150px" align="center">
         <template slot-scope="{row}">
           <span v-if="row.useStatus==0">未激活</span>
-          <span v-if="row.useStatus==1">已激活</span>
-          <span v-if="row.useStatus==2">已过期</span>
-          <span>{{ row.useStatus }}</span>
+          <span v-else-if="row.useStatus==1">已激活</span>
+          <span v-else-if="row.useStatus==2">已过期</span>
+          <span v-else>{{ row.useStatus }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="cardRule" width="150px" align="center">
+      <el-table-column label="卡规则" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cardRule.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="productDesc" width="150px" align="center">
+      <el-table-column label="卡类型" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cardBdProduct.productDesc }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="balance" width="150px" align="center">
+      <el-table-column label="余额" width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cardAccount.balance }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="createTime" width="150px" align="center">
+      <el-table-column label="申请时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -116,25 +116,22 @@
           </el-tag>
         </template>
       </el-table-column> -->
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
+            编辑
           </el-button>
           <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
+            查看
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
@@ -274,8 +271,8 @@ export default {
     getList() {
       this.listLoading = true
       cardList(this.listQuery).then(response => {
-        this.list = response.result.items
-        this.total = response.result.total
+        this.list = response.result
+        this.total = response.total
 
         // Just to simulate the time of the request
         setTimeout(() => {
