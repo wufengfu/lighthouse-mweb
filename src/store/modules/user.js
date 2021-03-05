@@ -45,7 +45,6 @@ const actions = {
         //   setToken(data.token)
         //   setAuth('eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MTY4MzYxNzcsInVzZXJJZCI6IjUifQ.fMAFuld5U4cDnKKodB-KdpopNDd96frgXpALL_yp6gvjVaM453zIA3p_YaSR1KBD7zjetsqHUce01rics-6hGg')
         //   resolve()
-
       }).catch(error => {
         reject(error)
       })
@@ -69,7 +68,7 @@ const actions = {
         //   reject('getInfo: roles must be a non-null array!')
         // }
 
-        commit('SET_ROLES', ["admin"])
+        commit('SET_ROLES', ['admin'])
         // commit('SET_NAME', name)
         commit('SET_NAME', loginName)
         commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
