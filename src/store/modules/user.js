@@ -33,12 +33,19 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        setAuth('eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MTY4MzYxNzcsInVzZXJJZCI6IjUifQ.fMAFuld5U4cDnKKodB-KdpopNDd96frgXpALL_yp6gvjVaM453zIA3p_YaSR1KBD7zjetsqHUce01rics-6hGg')
+      login({ loginName: username.trim(), loginPass: password }).then(response => {
+        const { result } = response
+        commit('SET_TOKEN', result.token)
+        setAuth(result.token)
         resolve()
+
+        // login({ username: username.trim(), password: password }).then(response => {
+        //   const { data } = response
+        //   commit('SET_TOKEN', data.token)
+        //   setToken(data.token)
+        //   setAuth('eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MTY4MzYxNzcsInVzZXJJZCI6IjUifQ.fMAFuld5U4cDnKKodB-KdpopNDd96frgXpALL_yp6gvjVaM453zIA3p_YaSR1KBD7zjetsqHUce01rics-6hGg')
+        //   resolve()
+
       }).catch(error => {
         reject(error)
       })
@@ -49,24 +56,26 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+        const { result } = response
 
-        if (!data) {
+        if (!result) {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
-
+        const { loginName } = result
+        const { roles, name, avatar, introduction } = result
         // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
+        // if (!roles || roles.length <= 0) {
+        //   reject('getInfo: roles must be a non-null array!')
+        // }
 
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        commit('SET_ROLES', ["admin"])
+        // commit('SET_NAME', name)
+        commit('SET_NAME', loginName)
+        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+        commit('SET_INTRODUCTION', 'I am a super administrator')
+        // resolve(data)
+        resolve(result)
       }).catch(error => {
         reject(error)
       })
